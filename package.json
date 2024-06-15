@@ -2,14 +2,27 @@
   "name": "@honeycombio/opentelemetry-web",
   "version": "0.3.0",
   "description": "Honeycomb OpenTelemetry Wrapper for Browser Applications",
-  "main": "./dist/src/index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
-    "dist",
+    "build",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc --build",
+    "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
+    "build:clean": "rm -rf ./build",
+    "build": "npm run build:clean && npm run compile && node ./scripts/prepare-package-json",
     "check-format": "prettier --list-different \"./**/*.{ts,mts,cts,js,cjs,mjs,tsx,jsx}\"",
     "format": "prettier --write \"./**/*.{ts,mts,cts,js,cjs,mjs,tsx,jsx}\"",
     "clean": "tsc --build --clean",
